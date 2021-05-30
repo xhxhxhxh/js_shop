@@ -10,16 +10,20 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   List bannerList = [];
   List hotProductsList = [];
   List popularRecommendationList = [];
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     this._getBannerData();
     this._getHotProductsData();
     this._getPopularRecommendationData();
+    print('home');
   }
 
   _getBannerData() async{
@@ -138,7 +142,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget product(value) {
-    print(value);
     String url = Config.baseUrl + '/' + value['pic'].replaceAll('\\', '/');
     return Container(
       width: 342.w,
@@ -177,6 +180,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ListView(
       children: [
         swiperContainer(),
