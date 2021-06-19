@@ -78,7 +78,8 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
   }
 
   Widget RightList() {
-    return Expanded(child: Container(
+    return Expanded(
+      child: Container(
       color: Color(0xFFf1f5f6),
       padding: EdgeInsets.only(left: 20.w, right: 20.w),
       child: Container(
@@ -95,17 +96,24 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
             itemBuilder: (context, index){
               Map currentData = this.rightListData[index];
               String url = Config.baseUrl + '/' + currentData['pic'].replaceAll('\\', '/');
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.network(
-                    url,
-                    fit: BoxFit.cover,
+              return InkWell(
+                onTap: (){
+                  Navigator.pushNamed(context, '/productList', arguments: {
+                    '_id': currentData['_id']
+                  });
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.network(
+                      url,
+                      fit: BoxFit.cover,
 //                        width: 120.w,
 //                        height: 120.w,
-                  ),
-                  Text(currentData['title'], style: TextStyle(color: Color(0xFF626262)),)
-                ],
+                    ),
+                    Text(currentData['title'], style: TextStyle(color: Color(0xFF626262)),)
+                  ],
+                ),
               );
             }
         ),

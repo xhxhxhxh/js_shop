@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../pages/Tabs/Tabs.dart';
+import '../pages/ProductList/ProductList.dart';
 
 
 final routes = {
   '/': (context, {arguments}) => Tabs(),
+  '/productList': (context, {arguments}) => ProductListPage(arguments: arguments),
 };
 
 Route onGenerateRoute (RouteSettings settings) {
