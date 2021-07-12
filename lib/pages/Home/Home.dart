@@ -143,37 +143,42 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
   Widget product(value) {
     String url = Config.baseUrl + '/' + value['pic'].replaceAll('\\', '/');
-    return Container(
-      width: 342.w,
-      height: 480.w,
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-          border: Border.all(color: Color.fromRGBO(233, 233, 233, 0.9), width: 1)
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Image.network(url, fit: BoxFit.cover, height: 300.w),
-          Text(
-            value['title'],
-            maxLines: 2,
-            textScaleFactor: 1.0,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Color(0xFF646464), fontSize: 27.sp),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('¥' + value['price'].toString(),textScaleFactor: 1.0,style: TextStyle(color: Color(0xFFf32b1d), fontSize: 29.sp)),
-              Text(
-                  '¥' + value['old_price'].toString(),
-                textScaleFactor: 1.0,
-                style: TextStyle(color: Color(0xFF282828),
-                fontSize: 24.sp,
-                decoration: TextDecoration.lineThrough))
-            ],
-          )
-        ],
+    return InkWell(
+      onTap: (){
+        Navigator.pushNamed(context, '/productDetail', arguments: { 'id':  value['_id']});
+      },
+      child: Container(
+        width: 342.w,
+        height: 480.w,
+        padding: EdgeInsets.all(20.w),
+        decoration: BoxDecoration(
+            border: Border.all(color: Color.fromRGBO(233, 233, 233, 0.9), width: 1)
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Image.network(url, fit: BoxFit.cover, height: 300.w),
+            Text(
+              value['title'],
+              maxLines: 2,
+              textScaleFactor: 1.0,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: Color(0xFF646464), fontSize: 27.sp),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('¥' + value['price'].toString(),textScaleFactor: 1.0,style: TextStyle(color: Color(0xFFf32b1d), fontSize: 29.sp)),
+                Text(
+                    '¥' + value['old_price'].toString(),
+                    textScaleFactor: 1.0,
+                    style: TextStyle(color: Color(0xFF282828),
+                        fontSize: 24.sp,
+                        decoration: TextDecoration.lineThrough))
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

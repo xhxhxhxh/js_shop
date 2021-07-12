@@ -31,6 +31,10 @@ dependencies:
   flutter_screenutil: ^4.0.4+1
   flutter_swiper: ^1.1.6
   dio: ^3.0.10
+  shared_preferences: ^0.5.12+4
+  flutter_inappwebview: ^4.0.0+4
+  provider: ^4.3.3
+
 
 dev_dependencies:
   flutter_test:

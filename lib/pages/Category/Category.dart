@@ -18,6 +18,7 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
 
   @override
   void initState() {
+    super.initState();
     this._getLeftList();
     print('cate');
   }

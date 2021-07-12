@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../api/dio.dart';
 import '../../config/config.dart';
 import '../../widgets/LoadingWidget.dart';
+import '../../api/Storage.dart';
+
+var storage = Storage();
 
 class ProductListPage extends StatefulWidget {
   final Map arguments;
@@ -18,9 +21,12 @@ class _ProductListPageState extends State<ProductListPage> {
   int page = 1;
   int pageSize = 8;
   bool flag = false;
+  bool noData = false;
   String sortType;
   int sort = 1;
+  String _keyword = '';
   List productList = [];
+  var _initKeywordsController = new TextEditingController();
   List tabItems = [
     {'id': 1, 'label': '综合'},
     {'id': 2, 'label': '销量', 'sort': 1, 'sortType': 'salecount'},
@@ -39,6 +45,7 @@ class _ProductListPageState extends State<ProductListPage> {
         this._getProductList();
       }
     });
+    this._keyword = this._initKeywordsController.text = widget.arguments['keyword'];
     this._getProductList();
   }
 
@@ -51,6 +58,13 @@ class _ProductListPageState extends State<ProductListPage> {
     });
   }
 
+  // 重置page等参数
+  void initParams(){
+    this.productList = [];
+    this.page = 1;
+    _scrollController.jumpTo(0);
+  }
+
   void _getProductList() async {
     if (this.flag) return;
 
@@ -58,14 +72,25 @@ class _ProductListPageState extends State<ProductListPage> {
       this.flag = true;
     });
 
-    var res = await dio.get(
-        '/api/plist?page=${this.page}&pageSize=${this.pageSize}&cid=${widget.arguments['_id']}&sort=${sortType != null ? sortType + '_' + sort.toString() : ''}');
+    String url = '';
+    if (this._keyword != null) {
+      url = '/api/plist?page=${this.page}&pageSize=${this.pageSize}&search=${this._keyword}&sort=${sortType != null ? sortType + '_' + sort.toString() : ''}';
+    } else {
+      url = '/api/plist?page=${this.page}&pageSize=${this.pageSize}&cid=${widget.arguments['_id']}&sort=${sortType != null ? sortType + '_' + sort.toString() : ''}';
+    }
+    print(url);
+    var res = await dio.get(url);
     List result = res.data['result'];
     print(result);
     this.setState(() {
       this.flag = false;
       if (result.length > 0) {
         this.page++;
+        this.noData = false;
+      } else {
+        if (this.page == 1) {
+          this.noData = true;
+        }
       }
       this.productList.addAll(result);
     });
@@ -89,6 +114,13 @@ class _ProductListPageState extends State<ProductListPage> {
     }
     return Text('');
   }
+
+  Widget NoData() {
+    return this.noData ? Center(
+      child: Text('没有找到这个商品'),
+    ) : Text('');
+  }
+
   Widget TopBar() {
     return Positioned(
         top: 0,
@@ -108,9 +140,7 @@ class _ProductListPageState extends State<ProductListPage> {
                           this.sortType = item['sortType'];
                         }
                         this.selectedTab = item['id'];
-                        this.productList = [];
-                        this.page = 1;
-                        _scrollController.jumpTo(0);
+                        this.initParams();
                         int sort = item['sort'];
 
                         if (sort != null) {
@@ -176,6 +206,9 @@ class _ProductListPageState extends State<ProductListPage> {
           return Column(
             children: [
               InkWell(
+                onTap: (){
+                  Navigator.pushNamed(context, '/productDetail', arguments: { 'id':  currentData['_id']});
+                },
                 child: Container(
                   padding: EdgeInsets.only(top: 30.w, bottom: 15.w),
                   height: 245.w,
@@ -236,11 +269,54 @@ class _ProductListPageState extends State<ProductListPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('商品列表'),
-        actions: [Text('')],
+//        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child:Container(
+                height: 60.w,
+                child: TextField(
+                  autofocus: false,
+                  controller: _initKeywordsController,
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(20.w),
+                    hintStyle: TextStyle(
+                        color: Colors.white
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.w),
+                        borderSide: BorderSide.none
+                    ),
+                    filled: true,
+                    fillColor: Color(0xFFd8d8d8),
+                  ),
+                  onChanged: (value){
+                    this._keyword = value;
+                  },
+                ),
+              ),
+            ),
+            SizedBox(width: 20.w,),
+            InkWell(
+              child: Text('搜索', style: TextStyle(
+                  fontSize: 32.sp
+              )),
+              onTap: (){
+                this.initParams();
+                this._getProductList();
+                storage.setSearchHistory(this._keyword);
+              },
+            ),
+          ],
+        ),
+        actions: [
+          Text('')
+        ],
       ),
       body: Stack(
-        children: [ProductList(), TopBar()],
+        children: [ProductList(), TopBar(), NoData()],
       ),
       endDrawer: Drawer(
         child: Text('筛选'),

@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'router/Router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
+import './provider/cartProvider.dart';
 
 void main() {
-  runApp(MyApp());
+//  debugPaintSizeEnabled = true;
+  runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => CartProvider()),
+        ],
+        child: MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +25,10 @@ class MyApp extends StatelessWidget {
       designSize: Size(750, 1334),
       builder: () => MaterialApp(
           initialRoute: '/',
-          onGenerateRoute: onGenerateRoute
+          onGenerateRoute: onGenerateRoute,
+        theme: ThemeData(
+            primaryColor: Colors.white
+        ),
       ),
     );
   }
