@@ -3,6 +3,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../api/dio.dart';
 import '../../config/config.dart';
+import '../../widgets/TopAppBar.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -186,14 +187,17 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ListView(
-      children: [
-        swiperContainer(),
-        titleContainer('猜你喜欢'),
-        hotProducts(),
-        titleContainer('热门推荐'),
-        popularRecommendation()
-      ],
+    return Scaffold(
+      appBar: TopAppBar.bar(context),
+      body: ListView(
+        children: [
+          swiperContainer(),
+          titleContainer('猜你喜欢'),
+          hotProducts(),
+          titleContainer('热门推荐'),
+          popularRecommendation()
+        ],
+      ),
     );
   }
 }

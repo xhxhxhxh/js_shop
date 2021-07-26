@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../api/dio.dart';
 import '../../config/config.dart';
+import '../../widgets/TopAppBar.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -125,11 +126,14 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Row(
-      children: [
-        LeftList(),
-        RightList()
-      ],
+    return Scaffold(
+      appBar: TopAppBar.bar(context),
+      body: Row(
+        children: [
+          LeftList(),
+          RightList()
+        ],
+      ),
     );
   }
 }

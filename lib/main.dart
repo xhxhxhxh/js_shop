@@ -6,11 +6,11 @@ import 'package:provider/provider.dart';
 import './provider/cartProvider.dart';
 
 void main() {
-//  debugPaintSizeEnabled = true;
+  debugPaintSizeEnabled = false;
   runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => CartProvider()),
+          ChangeNotifierProvider(create: (_) => CartProvider(), lazy: false,),
         ],
         child: MyApp(),
       )

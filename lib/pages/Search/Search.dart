@@ -13,7 +13,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   String _keyword = '';
-  List<String> _searchList = [];
+  List _searchList = [];
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   getSearchList() async {
-    List<String> searchList = await storage.getStorage('searchList');
+    List searchList = await storage.getStorage('searchList');
     this.setState(() {
       if (searchList != null) {
         _searchList = searchList;

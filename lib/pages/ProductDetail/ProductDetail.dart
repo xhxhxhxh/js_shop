@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../widgets/MyButton.dart';
 import '../ProductBaseInfo/ProductBaseInfo.dart';
 import '../ProductInformation/ProductInformation.dart';
+import '../../bus/eventBus.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Map arguments;
@@ -16,6 +17,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  showSelectProductModel() {
+    eventBus.fire(HandleBus('加入购物车'));
   }
 
   Widget tabBar() {
@@ -75,14 +80,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             child: Row(
               children: [
-                Container(
-                  width: 210.w,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.shopping_cart),
-                      Text('购物车')
-                    ],
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/cart');
+                  },
+                  child: Container(
+                    width: 210.w,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.shopping_cart),
+                        Text('购物车')
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(child: Row(
@@ -96,7 +106,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       borderRadius: BorderRadius.circular(20.w),
                       fontSize: 30.sp,
                       cb: (){
-
+                        this.showSelectProductModel();
                       },
                     ),
                     MyButton(
@@ -107,7 +117,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       borderRadius: BorderRadius.circular(20.w),
                       fontSize: 30.sp,
                       cb: (){
-
+                        this.showSelectProductModel();
                       },
                     )
                   ],
