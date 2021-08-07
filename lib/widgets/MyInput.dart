@@ -11,6 +11,7 @@ class MyInput extends StatelessWidget {
   final String text;
   final Function cb;
   final bool obscureText;
+  final TextInputType keyboardType;
   MyInput({
     this.height,
     this.width = double.infinity,
@@ -20,7 +21,8 @@ class MyInput extends StatelessWidget {
     this.borderRadius,
     this.text,
     this.obscureText = false,
-    this.cb
+    this.cb,
+    this.keyboardType = TextInputType.text
   });
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class MyInput extends StatelessWidget {
       child: TextField(
         autofocus: false,
         style: TextStyle(color: textColor),
+        keyboardType: keyboardType,
         obscureText: obscureText,
         decoration: InputDecoration(
           hintText: text,

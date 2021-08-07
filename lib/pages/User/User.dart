@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import '../../provider/userInfo.dart';
+import '../../widgets/MyButton.dart';
 
 class UserPage extends StatefulWidget {
   @override
@@ -9,6 +12,8 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
+    String userName = context.watch<UserInfoProvider>().username;
+
     return Scaffold(
       body: ListView(
         children: [
@@ -28,9 +33,11 @@ class _UserPageState extends State<UserPage> {
                 ),
                 SizedBox(width: 20.w,),
                 InkWell(
-                  child: Text('登录/注册', style: TextStyle(color: Colors.white, fontSize: 30.sp),),
+                  child: Text(userName == null ? '登录/注册' : userName, style: TextStyle(color: Colors.white, fontSize: 30.sp),),
                   onTap: () {
-                    Navigator.pushNamed(context, '/login');
+                    if (userName == null) {
+                      Navigator.pushNamed(context, '/login');
+                    }
                   },
                 )
               ],
@@ -64,6 +71,20 @@ class _UserPageState extends State<UserPage> {
             title: Text("在线客服"),
           ),
           Divider(),
+          userName == null ? Text('') : Container(
+            child:  MyButton(
+              text: '退出登录',
+              width: double.infinity,
+              height: 75.w,
+              backgroundColor: Color(0xFFffffff),
+              textColor: Colors.black87,
+              borderRadius: BorderRadius.circular(20.w),
+              fontSize: 30.sp,
+              cb: () {
+                context.read<UserInfoProvider>().removeInfo();
+              },
+            ),
+          )
         ],
       ),
     );

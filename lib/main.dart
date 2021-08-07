@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import './provider/cartProvider.dart';
+import './provider/userInfo.dart';
 
 void main() {
   debugPaintSizeEnabled = false;
@@ -11,6 +12,7 @@ void main() {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => CartProvider(), lazy: false,),
+          ChangeNotifierProvider(create: (_) => UserInfoProvider(), lazy: false,),
         ],
         child: MyApp(),
       )
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: Size(750, 1334),
       builder: () => MaterialApp(
-          initialRoute: '/',
+          initialRoute: '/registerFirst',
           onGenerateRoute: onGenerateRoute,
         theme: ThemeData(
             primaryColor: Colors.white
