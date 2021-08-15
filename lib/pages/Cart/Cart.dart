@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../provider/cartProvider.dart';
 import '../../widgets/MyButton.dart';
 import './CartItem.dart';
+import '../../provider/userInfo.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -16,6 +17,10 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     bool checkedAll = context.watch<CartProvider>().checkedAll;
     List productList = context.watch<CartProvider>().productList;
+    if (productList == null) {
+      productList = [];
+    }
+    List checkedProductList = productList.where((element) => element['checked']).toList();
     return Scaffold(
 //      floatingActionButton: FloatingActionButton(
 //        child: Icon(Icons.plus_one),
@@ -81,7 +86,7 @@ class _CartPageState extends State<CartPage> {
                   Container(
                     margin: EdgeInsets.only(right: 20.w),
                     child: MyButton(
-                      text: isEdit ? '删除': '结算',
+                      text: isEdit ? '删除': '结算(${checkedProductList.length})',
                       width: 180.w,
                       height: 70.w,
                       backgroundColor: Color(0xFFfb191b),
@@ -90,6 +95,15 @@ class _CartPageState extends State<CartPage> {
                       cb: (){
                         if (isEdit) {
                           context.read<CartProvider>().removeProduct();
+                        } else {
+                          String username = context.read<UserInfoProvider>().username;
+                          if (username != null) {
+                            if (checkedProductList.length > 0) {
+                              Navigator.pushNamed(context, '/order', arguments: {'checkedProductList': checkedProductList});
+                            }
+                          } else {
+                            Navigator.pushNamed(context, '/login');
+                          }
                         }
                       },
                     ),

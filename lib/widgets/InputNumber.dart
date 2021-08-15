@@ -27,6 +27,7 @@ class _InputNumberState extends State<InputNumber> {
 
   @override
   Widget build(BuildContext context) {
+    this.number = widget.defaultNumber;
     return Container(
       width: 160.w,
       height: 45.w,

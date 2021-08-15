@@ -12,6 +12,10 @@ class MyInput extends StatelessWidget {
   final Function cb;
   final bool obscureText;
   final TextInputType keyboardType;
+  final int maxLines;
+  final bool enabled;
+  final Function tap;
+  final TextEditingController controller;
   MyInput({
     this.height,
     this.width = double.infinity,
@@ -22,12 +26,20 @@ class MyInput extends StatelessWidget {
     this.text,
     this.obscureText = false,
     this.cb,
-    this.keyboardType = TextInputType.text
+    this.tap,
+    this.keyboardType = TextInputType.text,
+    this.maxLines = 1,
+    this.enabled = true,
+    this.controller
   });
   @override
   Widget build(BuildContext context) {
     return Container(
       child: TextField(
+        controller: controller,
+        onTap: tap,
+        enabled: enabled,
+        maxLines: maxLines,
         autofocus: false,
         style: TextStyle(color: textColor),
         keyboardType: keyboardType,

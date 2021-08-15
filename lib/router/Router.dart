@@ -8,10 +8,18 @@ import '../pages/Login/Login.dart';
 import '../pages/register/RegisterFirst.dart';
 import '../pages/register/RegisterSecond.dart';
 import '../pages/register/RegisterThird.dart';
+import '../pages/Order/Order.dart';
+import '../pages/Address/Address.dart';
+import '../pages/Address/AddAddress.dart';
+import '../pages/Address/EditAddress.dart';
 
 final routes = {
   '/': (context, {arguments}) => Tabs(),
   '/login': (context, {arguments}) => LoginPage(),
+  '/order': (context, {arguments}) => OrderPage(arguments: arguments),
+  '/address': (context, {arguments}) => AddressPage(),
+  '/addAddress': (context, {arguments}) => AddAddressPage(),
+  '/editAddress': (context, {arguments}) => EditAddressPage(arguments: arguments),
   '/registerFirst': (context, {arguments}) => RegisterFirst(),
   '/registerSecond': (context, {arguments}) => RegisterSecond(arguments: arguments),
   '/registerThird': (context, {arguments}) => RegisterThird(arguments: arguments),
