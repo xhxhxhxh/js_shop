@@ -10,16 +10,17 @@ import '../../provider/cartProvider.dart';
 import '../../provider/userInfo.dart';
 import '../../api/common.dart';
 import '../../api/dio.dart';
+import '../../widgets/Toast.dart';
+import 'dart:convert';
 
-
-class OrderPage extends StatefulWidget {
+class SettlementPage extends StatefulWidget {
   final Map arguments;
-  OrderPage({this.arguments});
+  SettlementPage({this.arguments});
   @override
-  _OrderPageState createState() => _OrderPageState();
+  _SettlementPageState createState() => _SettlementPageState();
 }
 
-class _OrderPageState extends State<OrderPage> {
+class _SettlementPageState extends State<SettlementPage> {
   List checkedProductList = [];
   Map defaultAddress;
   var bus;
@@ -78,6 +79,30 @@ class _OrderPageState extends State<OrderPage> {
           this.defaultAddress = null;
         }
       });
+    }
+  }
+
+  _order() async {
+    Map userInfo = context.read<UserInfoProvider>().userInfo[0];
+    Map<String, dynamic> params = {
+      'uid': userInfo['_id'],
+      'salt': userInfo['salt'],
+      'address': defaultAddress['address'],
+      'phone': defaultAddress['phone'],
+      'name': defaultAddress['name'],
+      'all_price': context.read<CartProvider>().allPrice.toStringAsFixed(1),
+      'products': json.encode(checkedProductList)
+    };
+    String sign = Api.getSign(params);
+    params['sign'] = sign;
+    params.remove('salt');
+    var res = await dio.post('/api/doOrder', data: params);
+    var data = res.data;
+    print(data);
+    bool success = data['success'];
+    if (success) {
+      context.read<CartProvider>().removeProduct();
+      Navigator.pushReplacementNamed(context, '/pay');
     }
   }
 
@@ -157,15 +182,21 @@ class _OrderPageState extends State<OrderPage> {
                       height: 120.w,
                       color: Colors.white,
                       child: Center(
-                        child:  ListTile(
+                        child: ListTile(
                             leading: Icon(Icons.location_on),
-                            title: defaultAddress != null ? Text('${defaultAddress['name']} ${defaultAddress['phone']}') : Text('请添加收货地址'),
-                            subtitle: defaultAddress != null ? Text('${defaultAddress['address']}') : null,
+                            title: defaultAddress != null
+                                ? Text(
+                                    '${defaultAddress['name']} ${defaultAddress['phone']}')
+                                : Text('请添加收货地址'),
+                            subtitle: defaultAddress != null
+                                ? Text('${defaultAddress['address']}')
+                                : null,
                             trailing: Icon(Icons.arrow_forward_ios)),
                       ),
                     ),
-                    onTap: (){
-                      Navigator.pushNamed(context, '/address').then((value) => this._getDefaultAddress());
+                    onTap: () {
+                      Navigator.pushNamed(context, '/address')
+                          .then((value) => this._getDefaultAddress());
                     },
                   ),
                   SizedBox(
@@ -249,7 +280,13 @@ class _OrderPageState extends State<OrderPage> {
                       backgroundColor: Color(0xFFfb191b),
                       borderRadius: BorderRadius.circular(5.w),
                       fontSize: 30.sp,
-                      cb: () {},
+                      cb: () {
+                        if (this.defaultAddress == null) {
+                          MyToast.show('请填写收货地址');
+                          return;
+                        }
+                        this._order();
+                      },
                     )
                   ],
                 ),

@@ -99,7 +99,7 @@ class _CartPageState extends State<CartPage> {
                           String username = context.read<UserInfoProvider>().username;
                           if (username != null) {
                             if (checkedProductList.length > 0) {
-                              Navigator.pushNamed(context, '/order', arguments: {'checkedProductList': checkedProductList});
+                              Navigator.pushNamed(context, '/settlementPage', arguments: {'checkedProductList': checkedProductList});
                             }
                           } else {
                             Navigator.pushNamed(context, '/login');
