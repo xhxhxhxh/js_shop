@@ -8,6 +8,9 @@
 .buildlog/
 .history
 .svn/
+build/
+.dart_tool/
+android/key.properties
 
 # IntelliJ related
 *.iml

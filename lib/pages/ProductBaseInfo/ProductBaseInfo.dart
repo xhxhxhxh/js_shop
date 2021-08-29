@@ -24,6 +24,7 @@ class _ProductBaseInfoState extends State<ProductBaseInfo>
   List attr;
   int num = 1;
   var bus;
+  var numBus;
   @override
   bool get wantKeepAlive => true;
 
@@ -35,8 +36,12 @@ class _ProductBaseInfoState extends State<ProductBaseInfo>
     this.bus = eventBus.on<HandleBus>().listen((event) {
       this.showBottomModal();
     });
-    eventBus.on<ChangeNum>().listen((event) {
-      this.num = event.num;
+    this.numBus = eventBus.on<ChangeNum>().listen((event) {
+      this.setState(() {
+        this.num = event.num;
+        print('---');
+        print(this.num);
+      });
     });
   }
 
@@ -45,6 +50,7 @@ class _ProductBaseInfoState extends State<ProductBaseInfo>
     // TODO: implement dispose
     super.dispose();
     this.bus.cancel();
+    this.numBus.cancel();
   }
 
   void _getProductInfo() async {

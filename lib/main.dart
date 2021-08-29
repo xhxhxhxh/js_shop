@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: Size(750, 1334),
       builder: () => MaterialApp(
-          initialRoute: '/address',
+          initialRoute: '/',
           onGenerateRoute: onGenerateRoute,
         theme: ThemeData(
             primaryColor: Colors.white
